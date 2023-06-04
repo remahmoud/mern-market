@@ -8,12 +8,12 @@ exports.whoami = async (req, res) => {
         // get user
         const user = await User.findById(req.userId);
         if (!user) {
-            return res.status(400).json({ msg: "User does not exist" });
+            return res.status(400).json({ message: "User does not exist" });
         }
         // send response
         return res.status(200).json(user);
     } catch (error) {
-        return res.status(500).json({ msg: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -26,23 +26,19 @@ exports.register = async (req, res) => {
         // check if user already exists
         const user = await User.findOne({ email });
         if (user) {
-            return res.status(400).json({ msg: "Email already exists" });
+            return res.status(400).json({ message: "Email already exists" });
         }
         // create new user
         const newUser = await User.create({ name, email, password });
         // create token
         const token = newUser.generateToken();
-        // send token in cookie
-        res.cookie("token", token, {
-            httpOnly: true,
-            secure: true,
-        });
         // send response
         return res.status(200).json({
-            msg: "Register success!",
+            message: "Register success!",
+            token,
         });
     } catch (error) {
-        return res.status(500).json({ msg: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -55,28 +51,23 @@ exports.login = async (req, res) => {
         // check if user exists
         const user = await User.findOne({ email }).select("+password");
         if (!user) {
-            return res.status(400).json({ msg: "Invalid credentials" });
+            return res.status(400).json({ message: "Invalid credentials" });
         }
         // check if password is correct
         const isMatch = await user.comparePassword(password);
         if (!isMatch) {
-            return res.status(400).json({ msg: "Invalid credentials" });
+            return res.status(400).json({ message: "Invalid credentials" });
         }
         // create token
         const token = user.generateToken();
 
-        // send token in cookie
-        res.cookie("token", token, {
-            httpOnly: true,
-            secure: true,
-        });
-
         // send response
         return res.status(200).json({
-            msg: "Login success!",
+            message: "Login success!",
+            token,
         });
     } catch (error) {
-        return res.status(500).json({ msg: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -88,9 +79,9 @@ exports.logout = async (req, res) => {
         // send response
         res.clearCookie("token");
         return res.status(200).json({
-            msg: "Logout success!",
+            message: "Logout success!",
         });
     } catch (error) {
-        return res.status(500).json({ msg: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
