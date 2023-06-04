@@ -51,12 +51,12 @@ exports.login = async (req, res) => {
         // check if user exists
         const user = await User.findOne({ email }).select("+password");
         if (!user) {
-            return res.status(400).json({ message: "Invalid credentials" });
+            return res.status(400).json({ message: "Email not exist" });
         }
         // check if password is correct
         const isMatch = await user.comparePassword(password);
         if (!isMatch) {
-            return res.status(400).json({ message: "Invalid credentials" });
+            return res.status(400).json({ message: "Wrong password" });
         }
         // create token
         const token = user.generateToken();
@@ -65,21 +65,6 @@ exports.login = async (req, res) => {
         return res.status(200).json({
             message: "Login success!",
             token,
-        });
-    } catch (error) {
-        return res.status(500).json({ message: error.message });
-    }
-};
-
-// @desc    Logout
-// @route   POST /api/auth/logout
-// @access  Private
-exports.logout = async (req, res) => {
-    try {
-        // send response
-        res.clearCookie("token");
-        return res.status(200).json({
-            message: "Logout success!",
         });
     } catch (error) {
         return res.status(500).json({ message: error.message });
