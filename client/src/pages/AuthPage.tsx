@@ -4,7 +4,7 @@ import { useState, useCallback } from "react";
 import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios, { isAxiosError } from "axios";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate, Navigate, Link } from "react-router-dom";
 import useAuth from "@/hooks/useAuth";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import WomanShopping from "@assets/woman-shopping.jpg";
@@ -82,7 +82,7 @@ export default function AuthPage() {
                 <div className="mx-auto w-full max-w-sm lg:w-96">
                     <div>
                         <h1 className="text-indigo-700 font-bold text-3xl text-center">
-                            Market
+                            <Link to="/">Market</Link>
                         </h1>
                     </div>
 

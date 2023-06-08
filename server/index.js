@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser");
 const dbConnect = require("./config/dbConnect");
 const authRoutes = require("./routes/auth");
 const productRoutes = require("./routes/product");
+const dashboardRoutes = require("./routes/dashboard");
 
 // config
 dotenv.config();
@@ -36,6 +37,7 @@ app.use(cookieParser());
 // routes
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 app.listen(port, () => {
     console.log(`server started at port ${port}`);

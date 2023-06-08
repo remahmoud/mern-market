@@ -5,3 +5,24 @@ export interface IAuthResponse {
 export interface IAuthError {
     message?: string;
 }
+
+export interface IProduct {
+    id: string;
+    name: string;
+    description: string;
+    price: number;
+    count: number;
+    image: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface IUser {
+    id: string;
+    email: string;
+    name: string;
+    isAdmin: boolean;
+    avatar: string;
+    createdAt: string;
+    updatedAt: string;
+}

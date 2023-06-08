@@ -10,13 +10,9 @@ exports.getProducts = async (req, res) => {
             .sort({ createdAt: -1 })
             .populate("user", "name email");
 
-        return res.status(200).json({
-            success: true,
-            products,
-        });
+        return res.status(200).json(products);
     } catch (error) {
         return res.status(500).json({
-            success: false,
             message: error.message,
         });
     }
@@ -34,18 +30,13 @@ exports.getProduct = async (req, res) => {
 
         if (!product) {
             return res.status(404).json({
-                success: false,
                 message: "Product not found",
             });
         }
 
-        return res.status(200).json({
-            success: true,
-            product,
-        });
+        return res.status(200).json(product);
     } catch (error) {
         return res.status(500).json({
-            success: false,
             message: error.message,
         });
     }
@@ -61,13 +52,9 @@ exports.createProduct = async (req, res) => {
             user: req.userId,
         });
 
-        return res.status(201).json({
-            success: true,
-            product,
-        });
+        return res.status(201).json(product);
     } catch (error) {
         return res.status(500).json({
-            success: false,
             message: error.message,
         });
     }
@@ -84,14 +71,12 @@ exports.updateProduct = async (req, res) => {
 
         if (!product) {
             return res.status(404).json({
-                success: false,
                 message: "Product not found",
             });
         }
 
         if (product.user.toString() !== req.userId) {
             return res.status(403).json({
-                success: false,
                 message: "You are not authorized to update this product",
             });
         }
@@ -105,13 +90,9 @@ exports.updateProduct = async (req, res) => {
 
         await product.save();
 
-        return res.status(200).json({
-            success: true,
-            product,
-        });
+        return res.status(200).json(product);
     } catch (error) {
         return res.status(500).json({
-            success: false,
             message: error.message,
         });
     }
@@ -126,14 +107,12 @@ exports.deleteProduct = async (req, res) => {
 
         if (!product) {
             return res.status(404).json({
-                success: false,
                 message: "Product not found",
             });
         }
 
         if (product.user.toString() !== req.userId) {
             return res.status(403).json({
-                success: false,
                 message: "You are not authorized to delete this product",
             });
         }
@@ -141,12 +120,10 @@ exports.deleteProduct = async (req, res) => {
         await product.deleteOne();
 
         return res.status(200).json({
-            success: true,
             message: "Product deleted successfully",
         });
     } catch (error) {
         return res.status(500).json({
-            success: false,
             message: error.message,
         });
     }

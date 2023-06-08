@@ -4,6 +4,8 @@ import Dashboard from "@pages/Dashboard";
 import NotFound from "@pages/NotFound";
 import Layout from "@components/Layout";
 import AuthPage from "@pages/AuthPage";
+import Users from "@pages/dashboard/Users";
+import Products from "./pages/dashboard/Products";
 
 export default function App() {
     return (
@@ -11,7 +13,11 @@ export default function App() {
             <Routes>
                 <Route element={<Layout />}>
                     <Route path="/" element={<Home />} />
-                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/dashboard" element={<Dashboard />}>
+                        <Route path="users" element={<Users />} />
+                        <Route path="products" element={<Products />} />
+                        <Route path="orders" element={<div>Orders</div>} />
+                    </Route>
                 </Route>
                 <Route path="/auth" element={<AuthPage />} />
                 <Route path="*" element={<NotFound />} />
