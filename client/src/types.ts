@@ -11,8 +11,9 @@ export interface IProduct {
     name: string;
     description: string;
     price: number;
-    count: number;
+    quantity: number;
     image: string;
+    category: string;
     createdAt: string;
     updatedAt: string;
 }
@@ -26,3 +27,8 @@ export interface IUser {
     createdAt: string;
     updatedAt: string;
 }
+
+export type ICreateProduct = Omit<
+    IProduct,
+    "id" | "createdAt" | "updatedAt" | "image"
+>;

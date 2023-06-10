@@ -1,5 +1,8 @@
 import { useUsersDataQuery } from "@/api/dashboardApi";
 import { XMarkIcon, CheckIcon } from "@heroicons/react/20/solid";
+import NewUserModal from "./components/NewUserModal";
+import DeleteUserModal from "./components/DeleteUserModal";
+import UpdateUserModal from "./components/UpdateUserModal";
 
 export default function Users() {
     const { data: users } = useUsersDataQuery();
@@ -7,6 +10,7 @@ export default function Users() {
     if (!users) {
         return null;
     }
+
     return (
         <div className="px-4 sm:px-6 lg:px-8 mt-4">
             <div className="sm:flex sm:items-center">
@@ -17,12 +21,7 @@ export default function Users() {
                     </p>
                 </div>
                 <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                    <button
-                        type="button"
-                        className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    >
-                        Add user
-                    </button>
+                    <NewUserModal />
                 </div>
             </div>
             <div className="mt-8 flow-root">
@@ -63,7 +62,7 @@ export default function Users() {
                             </thead>
                             <tbody className="divide-y divide-gray-200 bg-white">
                                 {users.map((user) => (
-                                    <tr key={user.email}>
+                                    <tr key={user.id}>
                                         <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                                             <div className="flex items-center">
                                                 <div className="h-11 w-11 flex-shrink-0">
@@ -88,22 +87,9 @@ export default function Users() {
                                                 <XMarkIcon className="fill-red-500 h-6 w-6 mx-auto" />
                                             )}
                                         </td>
-                                        <td className="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                                            <a
-                                                href="#"
-                                                className="text-indigo-600 hover:text-indigo-900"
-                                            >
-                                                Edit
-                                                <span className="sr-only">
-                                                    , {user.name}
-                                                </span>
-                                            </a>
-                                            <button className="text-red-500 hover:text-red-600 ml-4">
-                                                Delete
-                                                <span className="sr-only">
-                                                    , {user.name}
-                                                </span>
-                                            </button>
+                                        <td className="whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                                            <UpdateUserModal user={user} />
+                                            <DeleteUserModal id={user.id} />
                                         </td>
                                     </tr>
                                 ))}

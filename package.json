@@ -17,15 +17,15 @@
         "mongoose": "^7.2.2"
     },
     "devDependencies": {
+        "concurrently": "^8.2.0",
         "morgan": "^1.10.0",
-        "nodemon": "^2.0.22",
-        "npm-run-all": "^4.1.5"
+        "nodemon": "^2.0.22"
     },
     "scripts": {
         "start": "node server/index.js",
         "client": "yarn --cwd client dev",
         "server": "nodemon --watch ./server ./server/index.js",
         "seed": "node server/config/seeder.js",
-        "dev": "npm-run-all --parallel server client"
+        "dev": "concurrently \"yarn server\" \"yarn client\" "
     }
 }

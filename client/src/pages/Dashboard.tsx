@@ -1,5 +1,7 @@
+import { useUserDataQuery } from "@/api/authApi";
 import clsx from "clsx";
-import { NavLink, Outlet } from "react-router-dom";
+
+import { NavLink, Outlet, Navigate } from "react-router-dom";
 
 const tabs = [
     { name: "Products", href: "/dashboard/products", current: true },
@@ -8,6 +10,11 @@ const tabs = [
 ];
 
 export default function Dashboard() {
+    const { data: user, isLoading } = useUserDataQuery();
+
+    if ((!isLoading && !user) || (!isLoading && !user?.isAdmin)) {
+        return <Navigate to="/" />;
+    }
     return (
         <div className="container mx-auto px-4 md:px-16 h-full">
             <div className="block my-4">

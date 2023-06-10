@@ -32,13 +32,10 @@ const Product = new Schema(
             required: true,
             default: 1,
         },
-        sold: {
-            type: Number,
-            default: 0,
-        },
-        images: {
-            type: Array,
-            default: [],
+        image: {
+            type: String,
+            default:
+                "https://tailwindui.com/img/ecommerce-images/product-page-03-related-product-01.jpg",
         },
         category: {
             type: String,

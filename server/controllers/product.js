@@ -1,4 +1,5 @@
 const Product = require("../models/product.model");
+const User = require("../models/user.model");
 
 // @desc    Get all products
 // @route   GET /api/products
@@ -47,9 +48,16 @@ exports.getProduct = async (req, res) => {
 // @access  Private
 exports.createProduct = async (req, res) => {
     try {
+        const user = await User.findById(req.userId);
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found",
+            });
+        }
         const product = await Product.create({
             ...req.body,
-            user: req.userId,
+            user: user._id,
         });
 
         return res.status(201).json(product);
@@ -67,6 +75,13 @@ exports.updateProduct = async (req, res) => {
     const { name, description, price, quantity, images, category } = req.body;
 
     try {
+        const user = await User.findById(req.userId);
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found",
+            });
+        }
         const product = await Product.findById(req.params.id);
 
         if (!product) {
@@ -75,7 +90,7 @@ exports.updateProduct = async (req, res) => {
             });
         }
 
-        if (product.user.toString() !== req.userId) {
+        if (product.user.toString() !== user._id.toString()) {
             return res.status(403).json({
                 message: "You are not authorized to update this product",
             });
@@ -103,6 +118,13 @@ exports.updateProduct = async (req, res) => {
 // @access  Private
 exports.deleteProduct = async (req, res) => {
     try {
+        const user = await User.findById(req.userId);
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found",
+            });
+        }
         const product = await Product.findById(req.params.id);
 
         if (!product) {
@@ -111,7 +133,7 @@ exports.deleteProduct = async (req, res) => {
             });
         }
 
-        if (product.user.toString() !== req.userId) {
+        if (product.user.toString() !== user._id.toString()) {
             return res.status(403).json({
                 message: "You are not authorized to delete this product",
             });
