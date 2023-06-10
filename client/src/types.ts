@@ -28,7 +28,4 @@ export interface IUser {
     updatedAt: string;
 }
 
-export type ICreateProduct = Omit<
-    IProduct,
-    "id" | "createdAt" | "updatedAt" | "image"
->;
+export type ICreateProduct = Omit<IProduct, "id" | "createdAt" | "updatedAt">;

@@ -150,3 +150,25 @@ exports.deleteProduct = async (req, res) => {
         });
     }
 };
+
+// @desc  Upload image for product
+// @route POST /api/products/upload
+// @access Private
+
+exports.uploadImage = async (req, res) => {
+    try {
+        const image = req.file;
+        if (!image) {
+            return res.status(400).json({ message: "Please upload an image" });
+        }
+        return res.status(200).json({
+            message: "Image uploaded successfully",
+
+            path: "/uploads/" + image.filename,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: error.message,
+        });
+    }
+};

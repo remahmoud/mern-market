@@ -2,8 +2,8 @@ import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { ShoppingBagIcon } from "@heroicons/react/24/outline";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { ICreateProduct } from "@/types";
-import { useCreateProductMutation } from "@/api/dashboardApi";
+import { ICreateProduct, IProduct } from "@/types";
+import { useUpdateProductMutation } from "@/api/dashboardApi";
 import { PhotoIcon, TrashIcon } from "@heroicons/react/20/solid";
 import { useUploadImageMutation } from "@/api/productApi";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -16,24 +16,25 @@ const schema = yup.object().shape({
     description: yup.string().required(),
 });
 
-export default function NewProductModal() {
+export default function UpdateProductModal({ product }: { product: IProduct }) {
     const [open, setOpen] = useState(false);
-    const [image, setImage] = useState<string>("");
+    const [image, setImage] = useState<string>(product.image);
     const [uploadImage] = useUploadImageMutation();
-    const [createProduct, { isLoading }] = useCreateProductMutation();
+    const [updateProduct, { isLoading }] = useUpdateProductMutation();
 
     const { register, handleSubmit, reset } = useForm<ICreateProduct>({
         resolver: yupResolver(schema),
     });
 
     const onSubmit: SubmitHandler<ICreateProduct> = async (data) => {
-        const product = {
+        const updated = {
             ...data,
             image,
+            id: product.id,
             price: Number(data.price),
             quantity: Number(data.quantity),
         };
-        await createProduct(product)
+        await updateProduct(updated)
             .unwrap()
             .then(() => {
                 setOpen(false);
@@ -50,20 +51,18 @@ export default function NewProductModal() {
             uploadImage(formData)
                 .unwrap()
                 .then((res) => {
-                    console.log(res);
                     setImage(res.path);
                 });
         }
     };
 
     return (
-        <div>
+        <>
             <button
-                type="button"
                 onClick={() => setOpen(true)}
-                className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="text-indigo-600 hover:text-indigo-900"
             >
-                Add Product
+                Edit
             </button>
             <Transition.Root show={open} as={Fragment}>
                 <Dialog as="div" className="relative z-10" onClose={setOpen}>
@@ -111,6 +110,7 @@ export default function NewProductModal() {
                                                 <input
                                                     id="name"
                                                     type="text"
+                                                    defaultValue={product.name}
                                                     {...register("name", {
                                                         required: true,
                                                     })}
@@ -130,6 +130,7 @@ export default function NewProductModal() {
                                                     id="Price"
                                                     type="number"
                                                     step="0.01"
+                                                    defaultValue={product.price}
                                                     {...register("price")}
                                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                 />
@@ -146,6 +147,9 @@ export default function NewProductModal() {
                                                 <input
                                                     id="Quantity"
                                                     type="number"
+                                                    defaultValue={
+                                                        product.quantity
+                                                    }
                                                     {...register("quantity")}
                                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                 />
@@ -162,6 +166,9 @@ export default function NewProductModal() {
                                                 <input
                                                     id="Category"
                                                     type="text"
+                                                    defaultValue={
+                                                        product.category
+                                                    }
                                                     {...register("category")}
                                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                 />
@@ -235,6 +242,9 @@ export default function NewProductModal() {
                                         <div className="mt-4">
                                             <textarea
                                                 rows={3}
+                                                defaultValue={
+                                                    product.description
+                                                }
                                                 {...register("description")}
                                                 className="block overflow-hidden resize-none w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                 placeholder="Add a description for your product..."
@@ -246,7 +256,7 @@ export default function NewProductModal() {
                                                 disabled={isLoading}
                                                 className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                                             >
-                                                Create new product
+                                                Update product
                                             </button>
                                         </div>
                                     </form>
@@ -256,6 +266,6 @@ export default function NewProductModal() {
                     </div>
                 </Dialog>
             </Transition.Root>
-        </div>
+        </>
     );
 }

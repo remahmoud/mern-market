@@ -1,6 +1,7 @@
 import { useGetProductsQuery } from "@/api/dashboardApi";
 import NewProductModal from "./components/NewProductModal";
 import DeleteProductModal from "./components/DeleteProductModal";
+import UpdateProductModal from "./components/UpdateProductModal";
 
 export default function Products() {
     const { data: products } = useGetProductsQuery();
@@ -78,7 +79,9 @@ export default function Products() {
                                             {product.quantity}
                                         </td>
                                         <td className="whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                                            {/* <UpdateUserModal user={user} />*/}
+                                            <UpdateProductModal
+                                                product={product}
+                                            />
                                             <DeleteProductModal
                                                 id={product.id}
                                             />

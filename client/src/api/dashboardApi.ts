@@ -7,6 +7,8 @@ type ICreateUser = Pick<IUser, "name" | "email" | "isAdmin"> & {
 
 type IUpdateUser = Pick<IUser, "name" | "email" | "isAdmin" | "id">;
 
+type IUpdateProduct = Omit<IProduct, "createdAt" | "updatedAt">;
+
 export const dashboardApi = createApi({
     reducerPath: "dashboardApi",
     baseQuery: fetchBaseQuery({
@@ -70,6 +72,22 @@ export const dashboardApi = createApi({
             }),
             invalidatesTags: ["Products"],
         }),
+        updateProduct: builder.mutation<IProduct, IUpdateProduct>({
+            query: (body) => ({
+                url: `/dashboard/products/${body.id}`,
+                method: "PUT",
+                body: {
+                    name: body.name,
+                    price: body.price,
+                    image: body.image,
+                    category: body.category,
+                    quantity: body.quantity,
+                    description: body.description,
+                },
+            }),
+            invalidatesTags: ["Products"],
+        }),
+
         deleteProduct: builder.mutation<IProduct, string>({
             query: (id) => ({
                 url: `/dashboard/products/${id}`,
@@ -88,5 +106,6 @@ export const {
     useUpdateUserMutation,
     useDeleteUserMutation,
     useCreateProductMutation,
+    useUpdateProductMutation,
     useDeleteProductMutation,
 } = dashboardApi;
