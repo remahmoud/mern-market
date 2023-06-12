@@ -27,7 +27,7 @@ const Product = new Schema(
             trim: true,
             maxlength: 100,
         },
-        quantity: {
+        countInStock: {
             type: Number,
             required: true,
             default: 1,

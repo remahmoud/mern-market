@@ -49,7 +49,7 @@ export default function Products() {
                                         scope="col"
                                         className="px-3 py-3.5 text-center text-sm font-semibold text-gray-900"
                                     >
-                                        Quantity
+                                        Count In Stock
                                     </th>
                                     <th
                                         scope="col"
@@ -76,7 +76,7 @@ export default function Products() {
                                             {product.price}
                                         </td>
                                         <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500 text-center">
-                                            {product.quantity}
+                                            {product.countInStock}
                                         </td>
                                         <td className="whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                                             <UpdateProductModal

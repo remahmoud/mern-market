@@ -81,7 +81,7 @@ export const dashboardApi = createApi({
                     price: body.price,
                     image: body.image,
                     category: body.category,
-                    quantity: body.quantity,
+                    countInStock: body.countInStock,
                     description: body.description,
                 },
             }),

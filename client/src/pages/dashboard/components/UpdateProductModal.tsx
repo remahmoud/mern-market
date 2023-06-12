@@ -12,7 +12,7 @@ import * as yup from "yup";
 const schema = yup.object().shape({
     name: yup.string().required(),
     price: yup.number().required(),
-    quantity: yup.number().required(),
+    countInStock: yup.number().required(),
     description: yup.string().required(),
 });
 
@@ -32,7 +32,7 @@ export default function UpdateProductModal({ product }: { product: IProduct }) {
             image,
             id: product.id,
             price: Number(data.price),
-            quantity: Number(data.quantity),
+            countInStock: Number(data.countInStock),
         };
         await updateProduct(updated)
             .unwrap()
@@ -141,16 +141,18 @@ export default function UpdateProductModal({ product }: { product: IProduct }) {
                                                 htmlFor="Quantity"
                                                 className="block text-sm font-medium leading-6 text-gray-900"
                                             >
-                                                Quantity
+                                                Count In Stock
                                             </label>
                                             <div className="mt-2">
                                                 <input
                                                     id="Quantity"
                                                     type="number"
                                                     defaultValue={
-                                                        product.quantity
+                                                        product.countInStock
                                                     }
-                                                    {...register("quantity")}
+                                                    {...register(
+                                                        "countInStock"
+                                                    )}
                                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                 />
                                             </div>

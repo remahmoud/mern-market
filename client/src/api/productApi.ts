@@ -1,3 +1,4 @@
+import { IProduct } from "@/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 type IUploadImageResponse = {
@@ -18,7 +19,7 @@ export const productApi = createApi({
         },
     }),
     endpoints: (builder) => ({
-        getAllProducts: builder.query({
+        getProducts: builder.query<IProduct[], void>({
             query: () => "/products",
         }),
         uploadImage: builder.mutation<IUploadImageResponse, FormData>({
@@ -31,4 +32,4 @@ export const productApi = createApi({
     }),
 });
 
-export const { useGetAllProductsQuery, useUploadImageMutation } = productApi;
+export const { useGetProductsQuery, useUploadImageMutation } = productApi;

@@ -3,12 +3,14 @@ import { productApi } from "@/api/productApi";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { authApi } from "@/api/authApi";
 import { dashboardApi } from "@/api/dashboardApi";
+import cartReducer from "./cartSlice";
 
 export const store = configureStore({
     reducer: {
         [productApi.reducerPath]: productApi.reducer,
         [authApi.reducerPath]: authApi.reducer,
         [dashboardApi.reducerPath]: dashboardApi.reducer,
+        cart: cartReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat([

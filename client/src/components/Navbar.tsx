@@ -1,10 +1,15 @@
 import { Fragment } from "react";
 import { Menu, Popover, Transition } from "@headlessui/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import {
+    Bars3Icon,
+    XMarkIcon,
+    ShoppingCartIcon,
+} from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
 import { useUserDataQuery } from "@/api/authApi";
+import { useAppSelector } from "@/app/hooks";
 
 const navigation = [
     { name: "Profile", href: "/profile", isAdmin: false },
@@ -14,6 +19,7 @@ const navigation = [
 
 export default function Navbar() {
     const { data: user } = useUserDataQuery();
+    const items = useAppSelector((state) => state.cart.items);
 
     const handleSignout = () => {
         localStorage.removeItem("token");
@@ -35,8 +41,8 @@ export default function Navbar() {
                 {({ open }) => (
                     <>
                         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-16">
-                            <div className="relative flex justify-between lg:gap-8 xl:grid xl:grid-cols-10">
-                                <div className="flex md:absolute md:inset-y-0 md:left-0 lg:static xl:col-span-2">
+                            <div className="relative flex justify-between gap-4 lg:gap-8">
+                                <div className="flex md:absolute md:inset-y-0 md:left-0 lg:static">
                                     <div className="flex flex-shrink-0 items-center">
                                         <Link
                                             to="/"
@@ -46,7 +52,7 @@ export default function Navbar() {
                                         </Link>
                                     </div>
                                 </div>
-                                <div className="min-w-0 flex-1 md:px-8 lg:px-0 xl:col-span-6">
+                                <div className="min-w-0 md:px-8 lg:px-0 xl:basis-3/5">
                                     <div className="flex items-center px-6 py-4 md:mx-auto md:max-w-3xl lg:mx-0 lg:max-w-none xl:px-0">
                                         <div className="w-full">
                                             <label
@@ -73,34 +79,53 @@ export default function Navbar() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="flex items-center md:absolute md:inset-y-0 md:right-0 lg:hidden">
-                                    {!user ? (
-                                        <Link
-                                            to="/auth"
-                                            className="inline-flex items-center rounded-md bg-indigo-600 px-6 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                        >
-                                            Sign in
-                                        </Link>
-                                    ) : (
-                                        <Popover.Button className="-mx-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
-                                            <span className="sr-only">
-                                                Open menu
+                                <div className="flex items-center">
+                                    <Link
+                                        to="/cart"
+                                        className="flex items-center"
+                                    >
+                                        <span className="relative">
+                                            <ShoppingCartIcon
+                                                className="h-8 w-8 text-gray-400"
+                                                aria-hidden="true"
+                                            />
+                                            <span className="absolute -bottom-0.5 -right-1.5 text-white text-xs font-semibold rounded-full bg-indigo-500 px-1.5 py-0.5">
+                                                {items.length}
                                             </span>
-                                            {open ? (
-                                                <XMarkIcon
-                                                    className="block h-6 w-6"
-                                                    aria-hidden="true"
-                                                />
-                                            ) : (
-                                                <Bars3Icon
-                                                    className="block h-6 w-6"
-                                                    aria-hidden="true"
-                                                />
-                                            )}
-                                        </Popover.Button>
-                                    )}
+                                            <span className="sr-only">
+                                                Cart
+                                            </span>
+                                        </span>
+                                    </Link>
+                                    <div className="flex items-center md:absolute md:inset-y-0 md:right-0 lg:hidden">
+                                        {!user ? (
+                                            <Link
+                                                to="/auth"
+                                                className="inline-flex items-center rounded-md bg-indigo-600 px-6 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                            >
+                                                Sign in
+                                            </Link>
+                                        ) : (
+                                            <Popover.Button className="-mx-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                                                <span className="sr-only">
+                                                    Open menu
+                                                </span>
+                                                {open ? (
+                                                    <XMarkIcon
+                                                        className="block h-6 w-6"
+                                                        aria-hidden="true"
+                                                    />
+                                                ) : (
+                                                    <Bars3Icon
+                                                        className="block h-6 w-6"
+                                                        aria-hidden="true"
+                                                    />
+                                                )}
+                                            </Popover.Button>
+                                        )}
+                                    </div>
                                 </div>
-                                <div className="hidden lg:flex lg:items-center lg:justify-end xl:col-span-2">
+                                <div className="hidden lg:flex lg:items-center xl:col-span-1">
                                     {user ? (
                                         <Menu
                                             as="div"
@@ -183,7 +208,7 @@ export default function Navbar() {
                                     ) : (
                                         <Link
                                             to="/auth"
-                                            className="ml-6 inline-flex items-center rounded-md bg-indigo-600 px-6 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                            className="rounded-md bg-indigo-600 px-6 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                                         >
                                             Sign in
                                         </Link>

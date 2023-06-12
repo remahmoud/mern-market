@@ -6,6 +6,7 @@ import Layout from "@components/Layout";
 import AuthPage from "@pages/AuthPage";
 import Users from "@pages/dashboard/Users";
 import Products from "./pages/dashboard/Products";
+import Cart from "./pages/Cart";
 
 export default function App() {
     return (
@@ -13,6 +14,7 @@ export default function App() {
             <Routes>
                 <Route element={<Layout />}>
                     <Route path="/" element={<Home />} />
+                    <Route path="/cart" element={<Cart />} />
                     <Route path="/dashboard" element={<Dashboard />}>
                         <Route path="users" element={<Users />} />
                         <Route path="products" element={<Products />} />
